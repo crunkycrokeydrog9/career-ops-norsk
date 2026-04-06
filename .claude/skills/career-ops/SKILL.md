@@ -11,53 +11,53 @@ args: mode
 
 Determine the mode from `{{mode}}`:
 
-| Input | Mode |
-|-------|------|
-| (empty / no args) | `discovery` -- Show command menu |
-| JD text or URL (no sub-command) | **`auto-pipeline`** |
-| `oferta` | `oferta` |
-| `ofertas` | `ofertas` |
-| `contacto` | `contacto` |
-| `deep` | `deep` |
-| `pdf` | `pdf` |
-| `training` | `training` |
-| `project` | `project` |
-| `tracker` | `tracker` |
-| `pipeline` | `pipeline` |
-| `apply` | `apply` |
-| `scan` | `scan` |
-| `batch` | `batch` |
+| Input | Mode | Mode file |
+|-------|------|-----------|
+| (empty / no args) | `discovery` -- Show command menu | — |
+| JD text or URL (no sub-command) | **`auto-pipeline`** | `modes/nb/auto-pipeline.md` |
+| `oferta` / `tilbud` | `tilbud` | `modes/nb/tilbud.md` |
+| `ofertas` / `sammenlign` | `tilbud-sammenligning` | `modes/nb/tilbud-sammenligning.md` |
+| `contacto` / `kontakt` | `kontakt` | `modes/nb/kontakt.md` |
+| `deep` / `dybde` | `dybde` | `modes/nb/dybde.md` |
+| `pdf` | `pdf` | `modes/nb/pdf.md` |
+| `training` / `opplaering` | `opplaering` | `modes/nb/opplaering.md` |
+| `project` / `prosjekt` | `prosjekt` | `modes/nb/prosjekt.md` |
+| `tracker` | `tracker` | `modes/nb/tracker.md` |
+| `pipeline` | `pipeline` | `modes/nb/pipeline.md` |
+| `apply` / `soknad` | `soknad` | `modes/nb/soknad.md` |
+| `scan` / `skann` | `skann` | `modes/nb/skann.md` |
+| `batch` | `batch` | `modes/nb/batch.md` |
 
-**Auto-pipeline detection:** If `{{mode}}` is not a known sub-command AND contains JD text (keywords: "responsibilities", "requirements", "qualifications", "about the role", "we're looking for", company name + role) or a URL to a JD, execute `auto-pipeline`.
+**Auto-pipeline-gjenkjenning:** Hvis `{{mode}}` ikke er en kjent underkommando OG inneholder JD-tekst (nøkkelord: "responsibilities", "requirements", "qualifications", "about the role", "we're looking for", "ansvarsområder", "kvalifikasjoner", "vi ser etter", "om stillingen", selskapsnavn + rolle) eller en URL til en JD, kjør `auto-pipeline`.
 
-If `{{mode}}` is not a sub-command AND doesn't look like a JD, show discovery.
+Hvis `{{mode}}` ikke er en underkommando OG ikke ser ut som en JD, vis discovery.
 
 ---
 
-## Discovery Mode (no arguments)
+## Discovery Mode (ingen argumenter)
 
-Show this menu:
+Vis denne menyen:
 
 ```
-career-ops -- Command Center
+career-ops -- Kommandosenter (Norsk Bokmål)
 
-Available commands:
-  /career-ops {JD}      → AUTO-PIPELINE: evaluate + report + PDF + tracker (paste text or URL)
-  /career-ops pipeline  → Process pending URLs from inbox (data/pipeline.md)
-  /career-ops oferta    → Evaluation only A-F (no auto PDF)
-  /career-ops ofertas   → Compare and rank multiple offers
-  /career-ops contacto  → LinkedIn power move: find contacts + draft message
-  /career-ops deep      → Deep research prompt about company
-  /career-ops pdf       → PDF only, ATS-optimized CV
-  /career-ops training  → Evaluate course/cert against North Star
-  /career-ops project   → Evaluate portfolio project idea
-  /career-ops tracker   → Application status overview
-  /career-ops apply     → Live application assistant (reads form + generates answers)
-  /career-ops scan      → Scan portals and discover new offers
-  /career-ops batch     → Batch processing with parallel workers
+Tilgjengelige kommandoer:
+  /career-ops {JD}          → AUTO-PIPELINE: evaluer + rapport + PDF + tracker (lim inn tekst eller URL)
+  /career-ops pipeline      → Prosesser ventende URL-er fra innboks (data/pipeline.md)
+  /career-ops tilbud        → Kun evaluering A-F (uten auto-PDF)
+  /career-ops sammenlign    → Sammenlign og ranger flere tilbud
+  /career-ops kontakt       → LinkedIn-trekk: finn kontakter + skriv melding
+  /career-ops dybde         → Dybdeundersøkelse om selskap
+  /career-ops pdf           → Kun PDF, ATS-optimalisert CV
+  /career-ops opplaering    → Evaluer kurs/sertifisering mot Nordstjerne
+  /career-ops prosjekt      → Evaluer porteføljeprosjekt-idé
+  /career-ops tracker       → Søknadsoversikt
+  /career-ops soknad        → Søknadsassistent i sanntid (leser skjema + genererer svar)
+  /career-ops skann         → Skann portaler og oppdag nye stillinger
+  /career-ops batch         → Masseprosessering med parallelle workers
 
-Inbox: add URLs to data/pipeline.md → /career-ops pipeline
-Or paste a JD directly to run the full pipeline.
+Innboks: legg til URL-er i data/pipeline.md → /career-ops pipeline
+Eller lim inn en JD direkte for å kjøre hele pipelinen.
 ```
 
 ---
@@ -66,25 +66,25 @@ Or paste a JD directly to run the full pipeline.
 
 After determining the mode, load the necessary files before executing:
 
-### Modes that require `_shared.md` + their mode file:
-Read `modes/_shared.md` + `modes/{mode}.md`
+### Moduser som krever `_shared.md` + sin modusfil:
+Les `modes/nb/_shared.md` + `modes/nb/{modus}.md`
 
-Applies to: `auto-pipeline`, `oferta`, `ofertas`, `pdf`, `contacto`, `apply`, `pipeline`, `scan`, `batch`
+Gjelder: `auto-pipeline`, `tilbud`, `tilbud-sammenligning`, `pdf`, `kontakt`, `soknad`, `pipeline`, `skann`, `batch`
 
-### Standalone modes (only their mode file):
-Read `modes/{mode}.md`
+### Frittstående moduser (kun sin modusfil):
+Les `modes/nb/{modus}.md`
 
-Applies to: `tracker`, `deep`, `training`, `project`
+Gjelder: `tracker`, `dybde`, `opplaering`, `prosjekt`
 
-### Modes delegated to subagent:
-For `scan`, `apply` (with Playwright), and `pipeline` (3+ URLs): launch as Agent with the content of `_shared.md` + `modes/{mode}.md` injected into the subagent prompt.
+### Moduser delegert til subagent:
+For `skann`, `soknad` (med Playwright), og `pipeline` (3+ URL-er): start som Agent med innholdet av `_shared.md` + `modes/nb/{modus}.md` injisert i subagent-promptet.
 
 ```
 Agent(
   subagent_type="general-purpose",
-  prompt="[content of modes/_shared.md]\n\n[content of modes/{mode}.md]\n\n[invocation-specific data]",
-  description="career-ops {mode}"
+  prompt="[innhold fra modes/nb/_shared.md]\n\n[innhold fra modes/nb/{modus}.md]\n\n[invokasjonsspesifikke data]",
+  description="career-ops {modus}"
 )
 ```
 
-Execute the instructions from the loaded mode file.
+Kjør instruksjonene fra den lastede modusfilen.

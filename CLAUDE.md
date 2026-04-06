@@ -1,230 +1,230 @@
-# Career-Ops -- AI Job Search Pipeline
+# Career-Ops -- AI-drevet jobbsøkpipeline (Norsk Bokmål-fork)
 
-## Origin
+## Opprinnelse
 
-This system was built and used by [santifer](https://santifer.io) to evaluate 740+ job offers, generate 100+ tailored CVs, and land a Head of Applied AI role. The archetypes, scoring logic, negotiation scripts, and proof point structure all reflect his specific career search in AI/automation roles.
+Dette systemet ble bygget og brukt av [santifer](https://santifer.io) til å evaluere 740+ stillingsannonser, generere 100+ skreddersydde CV-er, og lande en Head of Applied AI-rolle. Denne forken er oversatt til norsk bokmål med tilpasninger for det norske arbeidsmarkedet (Finn.no, NAV, OTP, ferieloven osv.).
 
-The portfolio that goes with this system is also open source: [cv-santiago](https://github.com/santifer/cv-santiago).
+Original repo: [santifer/career-ops](https://github.com/santifer/career-ops). Porteføljen er også open source: [cv-santiago](https://github.com/santifer/cv-santiago).
 
-**It will work out of the box, but it's designed to be made yours.** If the archetypes don't match your career, the modes are in the wrong language, or the scoring doesn't fit your priorities -- just ask. You (Claude) can edit any file in this system. The user says "change the archetypes to data engineering roles" and you do it. That's the whole point.
+**Det fungerer rett ut av boksen, men er designet for å bli ditt.** Hvis arketypene ikke matcher din karriere eller scoringen ikke passer dine prioriteringer -- bare spør. Du (Claude) kan redigere enhver fil i dette systemet. Brukeren sier "endre arketypene til backend-roller" og du gjør det. Det er hele poenget.
 
-## What is career-ops
+## Hva er career-ops
 
-AI-powered job search automation built on Claude Code: pipeline tracking, offer evaluation, CV generation, portal scanning, batch processing.
+AI-drevet jobbsøkautomatisering bygget på Claude Code: pipeline-sporing, stillingsrvaluering, CV-generering, portalskanning, masseprosessering.
 
-### Main Files
+### Hovedfiler
 
-| File | Function |
-|------|----------|
-| `data/applications.md` | Application tracker |
-| `data/pipeline.md` | Inbox of pending URLs |
-| `data/scan-history.tsv` | Scanner dedup history |
-| `portals.yml` | Query and company config |
-| `templates/cv-template.html` | HTML template for CVs |
-| `generate-pdf.mjs` | Puppeteer: HTML to PDF |
-| `article-digest.md` | Compact proof points from portfolio (optional) |
-| `interview-prep/story-bank.md` | Accumulated STAR+R stories across evaluations |
-| `reports/` | Evaluation reports (format: `{###}-{company-slug}-{YYYY-MM-DD}.md`) |
+| Fil | Funksjon |
+|-----|----------|
+| `data/applications.md` | Søknadsoversikt |
+| `data/pipeline.md` | Innboks med ventende URL-er |
+| `data/scan-history.tsv` | Skannerhistorikk for dedup |
+| `portals.yml` | Spørrings- og selskapskonfigurasjon |
+| `templates/cv-template.html` | HTML-mal for CV-er |
+| `generate-pdf.mjs` | Playwright: HTML til PDF |
+| `article-digest.md` | Kompakte bevisstykker fra portefølje (valgfritt) |
+| `interview-prep/story-bank.md` | Akkumulerte STAR+R-historier på tvers av evalueringer |
+| `reports/` | Evalueringsrapporter (format: `{###}-{selskap-slug}-{YYYY-MM-DD}.md`) |
 
-### First Run — Onboarding (IMPORTANT)
+### Første kjøring — Onboarding (VIKTIG)
 
-**Before doing ANYTHING else, check if the system is set up.** Run these checks silently every time a session starts:
+**Før du gjør NOE ANNET, sjekk om systemet er satt opp.** Kjør disse sjekkene stille hver gang en økt starter:
 
-1. Does `cv.md` exist?
-2. Does `config/profile.yml` exist (not just profile.example.yml)?
-3. Does `portals.yml` exist (not just templates/portals.example.yml)?
+1. Finnes `cv.md`?
+2. Finnes `config/profile.yml` (ikke bare profile.example.yml)?
+3. Finnes `portals.yml` (ikke bare templates/portals.example.yml)?
 
-**If ANY of these is missing, enter onboarding mode.** Do NOT proceed with evaluations, scans, or any other mode until the basics are in place. Guide the user step by step:
+**Hvis NOEN av disse mangler, gå inn i onboarding-modus.** IKKE fortsett med evalueringer, skanninger eller andre moduser før det grunnleggende er på plass. Veilede brukeren steg for steg:
 
-#### Step 1: CV (required)
-If `cv.md` is missing, ask:
-> "I don't have your CV yet. You can either:
-> 1. Paste your CV here and I'll convert it to markdown
-> 2. Paste your LinkedIn URL and I'll extract the key info
-> 3. Tell me about your experience and I'll draft a CV for you
+#### Steg 1: CV (påkrevd)
+Hvis `cv.md` mangler, spør:
+> "Jeg har ikke CV-en din ennå. Du kan enten:
+> 1. Lime inn CV-en din her, så konverterer jeg den til markdown
+> 2. Lime inn LinkedIn-URL-en din, så henter jeg nøkkelinformasjonen
+> 3. Fortelle meg om erfaringen din, så lager jeg et CV-utkast
 >
-> Which do you prefer?"
+> Hva foretrekker du?"
 
-Create `cv.md` from whatever they provide. Make it clean markdown with standard sections (Summary, Experience, Projects, Education, Skills).
+Opprett `cv.md` fra det brukeren gir. Lag ren markdown med standardseksjoner (Sammendrag, Erfaring, Prosjekter, Utdanning, Ferdigheter).
 
-#### Step 2: Profile (required)
-If `config/profile.yml` is missing, copy from `config/profile.example.yml` and then ask:
-> "I need a few details to personalize the system:
-> - Your full name and email
-> - Your location and timezone
-> - What roles are you targeting? (e.g., 'Senior Backend Engineer', 'AI Product Manager')
-> - Your salary target range
+#### Steg 2: Profil (påkrevd)
+Hvis `config/profile.yml` mangler, kopier fra `config/profile.example.yml` og spør:
+> "Jeg trenger noen detaljer for å personalisere systemet:
+> - Fullt navn og e-post
+> - Sted og tidssone
+> - Hvilke roller sikter du mot? (f.eks. 'Senior Backend-utvikler', 'AI-produktsjef')
+> - Lønnsforventning (område)
 >
-> I'll set everything up for you."
+> Jeg setter opp alt for deg."
 
-Fill in `config/profile.yml` with their answers. For archetypes, map their target roles to the closest matches and update `modes/_shared.md` if needed.
+Fyll inn `config/profile.yml` med svarene. For arketyper, koble målrollene til de nærmeste matchene og oppdater `modes/nb/_shared.md` ved behov.
 
-#### Step 3: Portals (recommended)
-If `portals.yml` is missing:
-> "I'll set up the job scanner with 45+ pre-configured companies. Want me to customize the search keywords for your target roles?"
+#### Steg 3: Portaler (anbefalt)
+Hvis `portals.yml` mangler:
+> "Jeg setter opp jobbskanneren med 45+ forhåndskonfigurerte selskaper, pluss norske portaler (Finn.no, Arbeidsplassen). Vil du at jeg tilpasser søkeordene til dine målroller?"
 
-Copy `templates/portals.example.yml` → `portals.yml`. If they gave target roles in Step 2, update `title_filter.positive` to match.
+Kopier `templates/portals.example.yml` → `portals.yml`. Hvis brukeren ga målroller i Steg 2, oppdater `title_filter.positive` til å matche.
 
-#### Step 4: Tracker
-If `data/applications.md` doesn't exist, create it:
+#### Steg 4: Tracker
+Hvis `data/applications.md` ikke finnes, opprett den:
 ```markdown
-# Applications Tracker
+# Søknadsoversikt
 
-| # | Date | Company | Role | Score | Status | PDF | Report | Notes |
-|---|------|---------|------|-------|--------|-----|--------|-------|
+| # | Dato | Selskap | Rolle | Score | Status | PDF | Rapport | Notater |
+|---|------|---------|-------|-------|--------|-----|---------|---------|
 ```
 
-#### Step 5: Get to know the user (important for quality)
+#### Steg 5: Bli kjent med brukeren (viktig for kvalitet)
 
-After the basics are set up, proactively ask for more context. The more you know, the better your evaluations will be:
+Etter at det grunnleggende er satt opp, spør proaktivt om mer kontekst. Jo mer du vet, desto bedre blir evalueringene:
 
-> "The basics are ready. But the system works much better when it knows you well. Can you tell me more about:
-> - What makes you unique? What's your 'superpower' that other candidates don't have?
-> - What kind of work excites you? What drains you?
-> - Any deal-breakers? (e.g., no on-site, no startups under 20 people, no Java shops)
-> - Your best professional achievement — the one you'd lead with in an interview
-> - Any projects, articles, or case studies you've published?
+> "Det grunnleggende er klart. Men systemet fungerer mye bedre når det kjenner deg godt. Kan du fortelle meg mer om:
+> - Hva gjør deg unik? Hva er din 'superkraft' som andre kandidater ikke har?
+> - Hva slags arbeid begeistrer deg? Hva dreper motivasjonen?
+> - Noen dealbreakers? (f.eks. ikke på kontoret, ikke startups under 20 ansatte, ikke Java)
+> - Din beste profesjonelle prestasjon — den du ville ledet med i et intervju
+> - Noen prosjekter, artikler eller case-studier du har publisert?
 >
-> The more context you give me, the better I filter. Think of it as onboarding a recruiter — the first week I need to learn about you, then I become invaluable."
+> Jo mer kontekst du gir meg, desto bedre filtrerer jeg. Tenk på det som onboarding av en rekrutterer — den første uken trenger jeg å lære om deg, deretter blir jeg uvurderlig."
 
-Store any insights the user shares in `config/profile.yml` (under narrative) or in `article-digest.md` if they share proof points. Update `modes/_shared.md` archetypes and framing if what they describe doesn't match the defaults.
+Lagre innsikt brukeren deler i `config/profile.yml` (under narrative) eller i `article-digest.md` hvis de deler bevisstykker. Oppdater `modes/nb/_shared.md` arketyper og innramming hvis det brukeren beskriver ikke matcher standardinnstillingene.
 
-**After every evaluation, learn.** If the user says "this score is too high, I wouldn't apply here" or "you missed that I have experience in X", update your understanding. Adjust the framing in `_shared.md` or add notes to `profile.yml`. The system should get smarter with every interaction.
+**Etter hver evaluering, lær.** Hvis brukeren sier "denne scoren er for høy, jeg ville ikke søkt her" eller "du misset at jeg har erfaring med X", oppdater forståelsen din. Juster innrammingen i `modes/nb/_shared.md` eller legg til notater i `profile.yml`. Systemet skal bli smartere med hver interaksjon.
 
-#### Step 6: Ready
-Once all files exist, confirm:
-> "You're all set! You can now:
-> - Paste a job URL to evaluate it
-> - Run `/career-ops scan` to search portals
-> - Run `/career-ops` to see all commands
+#### Steg 6: Klar
+Når alle filer finnes, bekreft:
+> "Du er klar! Du kan nå:
+> - Lime inn en stillings-URL for å evaluere den
+> - Kjøre `/career-ops skann` for å søke i portaler
+> - Kjøre `/career-ops` for å se alle kommandoer
 >
-> Everything is customizable — just ask me to change anything.
+> Alt er tilpassbart — bare be meg endre hva som helst.
 >
-> Tip: Having a personal portfolio dramatically improves your job search. If you don't have one yet, the author's portfolio is also open source: github.com/santifer/cv-santiago — feel free to fork it and make it yours."
+> Tips: En personlig portefølje forbedrer jobbsøket dramatisk. Hvis du ikke har en ennå, er forfatterens portefølje også open source: github.com/santifer/cv-santiago — fork den gjerne og gjør den til din."
 
-Then suggest automation:
-> "Want me to scan for new offers automatically? I can set up a recurring scan every few days so you don't miss anything. Just say 'scan every 3 days' and I'll configure it."
+Foreslå deretter automatisering:
+> "Vil du at jeg skanner etter nye stillinger automatisk? Jeg kan sette opp en gjentakende skanning hver tredje dag så du ikke går glipp av noe. Bare si 'skann hver 3. dag' så ordner jeg det."
 
-If the user accepts, use the `/loop` or `/schedule` skill (if available) to set up a recurring `/career-ops scan`. If those aren't available, suggest adding a cron job or remind them to run `/career-ops scan` periodically.
+Hvis brukeren aksepterer, bruk `/loop` eller `/schedule`-skill (om tilgjengelig) for å sette opp gjentakende `/career-ops skann`. Hvis disse ikke er tilgjengelige, foreslå en cron-jobb eller minn dem på å kjøre `/career-ops skann` jevnlig.
 
-### Personalization
+### Tilpasning
 
-This system is designed to be customized by YOU (Claude). When the user asks you to change archetypes, translate modes, adjust scoring, add companies, or modify negotiation scripts -- do it directly. You read the same files you use, so you know exactly what to edit.
+Dette systemet er designet for å tilpasses av DEG (Claude). Når brukeren ber deg endre arketyper, justere scoring, legge til selskaper eller endre forhandlingsscript — gjør det direkte. Du leser de samme filene du bruker, så du vet nøyaktig hva du skal redigere.
 
-**Common customization requests:**
-- "Change the archetypes to [backend/frontend/data/devops] roles" → edit `modes/_shared.md`
-- "Translate the modes to English" → edit all files in `modes/`
-- "Add these companies to my portals" → edit `portals.yml`
-- "Update my profile" → edit `config/profile.yml`
-- "Change the CV template design" → edit `templates/cv-template.html`
-- "Adjust the scoring weights" → edit `modes/_shared.md` and `batch/batch-prompt.md`
+**Vanlige tilpasningsforespørsler:**
+- "Endre arketypene til [backend/frontend/data/devops]-roller" → rediger `modes/nb/_shared.md`
+- "Legg til disse selskapene i portalene mine" → rediger `portals.yml`
+- "Oppdater profilen min" → rediger `config/profile.yml`
+- "Endre CV-malens design" → rediger `templates/cv-template.html`
+- "Juster scoring-vektene" → rediger `modes/nb/_shared.md` og `batch/batch-prompt.md`
 
-### Skill Modes
+### Skill-moduser
 
-| If the user... | Mode |
-|----------------|------|
-| Pastes JD or URL | auto-pipeline (evaluate + report + PDF + tracker) |
-| Asks to evaluate offer | `oferta` |
-| Asks to compare offers | `ofertas` |
-| Wants LinkedIn outreach | `contacto` |
-| Asks for company research | `deep` |
-| Wants to generate CV/PDF | `pdf` |
-| Evaluates a course/cert | `training` |
-| Evaluates portfolio project | `project` |
-| Asks about application status | `tracker` |
-| Fills out application form | `apply` |
-| Searches for new offers | `scan` |
-| Processes pending URLs | `pipeline` |
-| Batch processes offers | `batch` |
+| Hvis brukeren... | Modus | Kommando |
+|------------------|-------|----------|
+| Limer inn JD eller URL | auto-pipeline (evaluer + rapport + PDF + tracker) | `/career-ops {JD}` |
+| Ber om å evaluere stilling | `tilbud` | `/career-ops tilbud` |
+| Ber om å sammenligne tilbud | `tilbud-sammenligning` | `/career-ops sammenlign` |
+| Vil ha LinkedIn-oppsøking | `kontakt` | `/career-ops kontakt` |
+| Ber om selskapsundersøkelse | `dybde` | `/career-ops dybde` |
+| Vil generere CV/PDF | `pdf` | `/career-ops pdf` |
+| Evaluerer kurs/sertifisering | `opplaering` | `/career-ops opplaering` |
+| Evaluerer porteføljeprosjekt | `prosjekt` | `/career-ops prosjekt` |
+| Spør om søknadsstatus | `tracker` | `/career-ops tracker` |
+| Fyller ut søknadsskjema | `soknad` | `/career-ops soknad` |
+| Søker etter nye stillinger | `skann` | `/career-ops skann` |
+| Prosesserer ventende URL-er | `pipeline` | `/career-ops pipeline` |
+| Masseprosesserer stillinger | `batch` | `/career-ops batch` |
 
-### CV Source of Truth
+### CV — sannhetskilde
 
-- `cv.md` in project root is the canonical CV
-- `article-digest.md` has detailed proof points (optional)
-- **NEVER hardcode metrics** -- read them from these files at evaluation time
+- `cv.md` i prosjektroten er den kanoniske CV-en
+- `article-digest.md` har detaljerte bevisstykker (valgfritt)
+- **ALDRI hardkode metrikker** — les dem fra disse filene ved evalueringstidspunkt
 
 ---
 
-## Ethical Use -- CRITICAL
+## Etisk bruk — KRITISK
 
-**This system is designed for quality, not quantity.** The goal is to help the user find and apply to roles where there is a genuine match -- not to spam companies with mass applications.
+**Dette systemet er designet for kvalitet, ikke kvantitet.** Målet er å hjelpe brukeren med å finne og søke på roller der det er en genuin match — ikke å spamme selskaper med massesøknader.
 
-- **NEVER submit an application without the user reviewing it first.** Fill forms, draft answers, generate PDFs -- but always STOP before clicking Submit/Send/Apply. The user makes the final call.
-- **Strongly discourage low-fit applications.** If a score is below 4.0/5, explicitly recommend against applying. The user's time and the recruiter's time are both valuable. Only proceed if the user has a specific reason to override the score.
-- **Quality over speed.** A well-targeted application to 5 companies beats a generic blast to 50. Guide the user toward fewer, better applications.
-- **Respect recruiters' time.** Every application a human reads costs someone's attention. Only send what's worth reading.
-
----
-
-## Offer Verification -- MANDATORY
-
-**NEVER trust WebSearch/WebFetch to verify if an offer is still active.** ALWAYS use Playwright:
-1. `browser_navigate` to the URL
-2. `browser_snapshot` to read content
-3. Only footer/navbar without JD = closed. Title + description + Apply = active.
-
-**Exception for batch workers (`claude -p`):** Playwright is not available in headless pipe mode. Use WebFetch as fallback and mark the report header with `**Verification:** unconfirmed (batch mode)`. The user can verify manually later.
+- **ALDRI send en søknad uten at brukeren har gjennomgått den først.** Fyll ut skjemaer, lag utkast til svar, generer PDF-er — men STOPP alltid før du klikker Send/Søk. Brukeren tar den endelige beslutningen.
+- **Fraråd søknader med lav match.** Hvis scoren er under 4.0/5, anbefal eksplisitt å ikke søke. Brukerens tid og rekruttererens tid er begge verdifulle. Fortsett bare hvis brukeren har en spesifikk grunn til å overstyre scoren.
+- **Kvalitet over hastighet.** Én godt målrettet søknad til 5 selskaper slår en generisk massesending til 50. Veilede brukeren mot færre, bedre søknader.
+- **Respekter rekruttereres tid.** Hver søknad et menneske leser koster noens oppmerksomhet. Send bare det som er verdt å lese.
 
 ---
 
-## Stack and Conventions
+## Stillingsverifisering — OBLIGATORISK
 
-- Node.js (mjs modules), Playwright (PDF + scraping), YAML (config), HTML/CSS (template), Markdown (data)
-- Scripts in `.mjs`, configuration in YAML
-- Output in `output/` (gitignored), Reports in `reports/`
-- JDs in `jds/` (referenced as `local:jds/{file}` in pipeline.md)
-- Batch in `batch/` (gitignored except scripts and prompt)
-- Report numbering: sequential 3-digit zero-padded, max existing + 1
-- **RULE: After each batch of evaluations, run `node merge-tracker.mjs`** to merge tracker additions and avoid duplications.
-- **RULE: NEVER create new entries in applications.md if company+role already exists.** Update the existing entry.
+**ALDRI stol på WebSearch/WebFetch for å verifisere om en stilling fortsatt er aktiv.** ALLTID bruk Playwright:
+1. `browser_navigate` til URL-en
+2. `browser_snapshot` for å lese innhold
+3. Bare footer/navbar uten JD = lukket. Tittel + beskrivelse + Søk = aktiv.
 
-### TSV Format for Tracker Additions
+**Unntak for batch-workers (`claude -p`):** Playwright er ikke tilgjengelig i headless pipe-modus. Bruk WebFetch som fallback og merk rapportheaderen med `**Verifisering:** ubekreftet (batch-modus)`. Brukeren kan verifisere manuelt senere.
 
-Write one TSV file per evaluation to `batch/tracker-additions/{num}-{company-slug}.tsv`. Single line, 9 tab-separated columns:
+---
+
+## Stack og konvensjoner
+
+- Node.js (mjs-moduler), Playwright (PDF + scraping), YAML (config), HTML/CSS (template), Markdown (data)
+- Script i `.mjs`, konfigurasjon i YAML
+- Output i `output/` (gitignored), Rapporter i `reports/`
+- JD-er i `jds/` (referert som `local:jds/{fil}` i pipeline.md)
+- Batch i `batch/` (gitignored unntatt script og prompt)
+- Rapportnummerering: sekvensielt 3-sifret null-padded, maks eksisterende + 1
+- **REGEL: Etter hver batch med evalueringer, kjør `node merge-tracker.mjs`** for å slå sammen tracker-tillegg og unngå duplikater.
+- **REGEL: ALDRI opprett nye oppføringer i applications.md hvis selskap+rolle allerede finnes.** Oppdater den eksisterende.
+
+### TSV-format for tracker-tillegg
+
+Skriv én TSV-fil per evaluering til `batch/tracker-additions/{nr}-{selskap-slug}.tsv`. Én linje, 9 tab-separerte kolonner:
 
 ```
-{num}\t{date}\t{company}\t{role}\t{status}\t{score}/5\t{pdf_emoji}\t[{num}](reports/{num}-{slug}-{date}.md)\t{note}
+{nr}\t{dato}\t{selskap}\t{rolle}\t{status}\t{score}/5\t{pdf_emoji}\t[{nr}](reports/{nr}-{slug}-{dato}.md)\t{notat}
 ```
 
-**Column order (IMPORTANT -- status BEFORE score):**
-1. `num` -- sequential number (integer)
-2. `date` -- YYYY-MM-DD
-3. `company` -- short company name
-4. `role` -- job title
-5. `status` -- canonical status (e.g., `Evaluated`)
-6. `score` -- format `X.X/5` (e.g., `4.2/5`)
-7. `pdf` -- `✅` or `❌`
-8. `report` -- markdown link `[num](reports/...)`
-9. `notes` -- one-line summary
+**Kolonnerekkefølge (VIKTIG — status FØR score):**
+1. `nr` — sekvensielt nummer (heltall)
+2. `dato` — YYYY-MM-DD
+3. `selskap` — kort selskapsnavn
+4. `rolle` — stillingstittel
+5. `status` — kanonisk status (f.eks. `Evaluert`)
+6. `score` — format `X.X/5` (f.eks. `4.2/5`)
+7. `pdf` — `✅` eller `❌`
+8. `rapport` — markdown-lenke `[nr](reports/...)`
+9. `notater` — oppsummering i 1 setning
 
-**Note:** In applications.md, score comes BEFORE status. The merge script handles this column swap automatically.
+**Merk:** I applications.md kommer score FØR status. Merge-scriptet håndterer denne kolonnebyttingen automatisk.
 
-### Pipeline Integrity
+### Pipeline-integritet
 
-1. **NEVER edit applications.md to ADD new entries** -- Write TSV in `batch/tracker-additions/` and `merge-tracker.mjs` handles the merge.
-2. **YES you can edit applications.md to UPDATE status/notes of existing entries.**
-3. All reports MUST include `**URL:**` in the header (between Score and PDF).
-4. All statuses MUST be canonical (see `templates/states.yml`).
-5. Health check: `node verify-pipeline.mjs`
-6. Normalize statuses: `node normalize-statuses.mjs`
+1. **ALDRI rediger applications.md for å LEGGE TIL nye oppføringer** — Skriv TSV i `batch/tracker-additions/` og `merge-tracker.mjs` håndterer sammenslåingen.
+2. **JA du kan redigere applications.md for å OPPDATERE status/notater for eksisterende oppføringer.**
+3. Alle rapporter MÅ inkludere `**URL:**` i headeren (mellom Score og PDF).
+4. Alle statuser MÅ være kanoniske (se `templates/states.yml`).
+5. Helsekontroll: `node verify-pipeline.mjs`
+6. Normaliser statuser: `node normalize-statuses.mjs`
 7. Dedup: `node dedup-tracker.mjs`
 
-### Canonical States (applications.md)
+### Kanoniske statuser (applications.md)
 
-**Source of truth:** `templates/states.yml`
+**Sannhetskilde:** `templates/states.yml`
 
-| State | When to use |
-|-------|-------------|
-| `Evaluated` | Report completed, pending decision |
-| `Applied` | Application sent |
-| `Responded` | Company responded |
-| `Interview` | In interview process |
-| `Offer` | Offer received |
-| `Rejected` | Rejected by company |
-| `Discarded` | Discarded by candidate or offer closed |
-| `SKIP` | Doesn't fit, don't apply |
+| Status | Norsk alias | Når brukes den |
+|--------|-------------|----------------|
+| `Evaluated` | `Evaluert` | Rapport ferdig, venter på beslutning |
+| `Applied` | `Søkt` | Søknad sendt |
+| `Responded` | `Besvart` | Selskapet har svart |
+| `Contacted` | `Kontaktet` | Kandidaten tok proaktivt kontakt |
+| `Interview` | `Intervju` | I intervjuprosess |
+| `Offer` | `Tilbud` | Tilbud mottatt |
+| `Rejected` | `Avslått` | Avslått av selskapet |
+| `Discarded` | `Forkastet` | Forkastet av kandidat eller stilling lukket |
+| `SKIP` | `HOPP OVER` | Passer ikke, ikke søk |
 
-**RULES:**
-- No markdown bold (`**`) in status field
-- No dates in status field (use the date column)
-- No extra text (use the notes column)
+**REGLER:**
+- Ingen markdown bold (`**`) i statusfeltet
+- Ingen datoer i statusfeltet (bruk datokolonnen)
+- Ingen ekstra tekst (bruk notatkolonnen)
