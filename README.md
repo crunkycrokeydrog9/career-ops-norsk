@@ -1,6 +1,6 @@
 # Career-Ops
 
-**[:gb: English](#what-is-this)** | **[:es: Español](#es-versión-en-español)**
+**[:gb: English](#what-is-this)** | **[:norway: Norsk](#no-norsk-versjon)**
 
 > AI-powered job search pipeline built on Claude Code. Evaluate offers, generate tailored CVs, scan portals, and track everything -- powered by AI agents.
 
@@ -213,101 +213,98 @@ MIT
 
 ---
 
-# :es: Version en Español
+# :norway: Norsk versjon
 
-## Que es esto
+## Hva er dette
 
-Career-Ops convierte Claude Code en un centro de mando de busqueda de empleo. En vez de trackear aplicaciones en un spreadsheet, tienes un pipeline AI que:
+Career-Ops gjør Claude Code til et komplett kommandosenter for jobbsøk. I stedet for å spore søknader i et regneark, får du en AI-drevet pipeline som:
 
-- **Evalua ofertas** con scoring estructurado A-F (10 dimensiones ponderadas)
-- **Genera PDFs personalizados** -- CVs ATS-optimizados por oferta
-- **Escanea portales** automaticamente (Greenhouse, Ashby, Lever, webs de empresas)
-- **Procesa en batch** -- evalua 10+ ofertas en paralelo con sub-agentes
-- **Trackea todo** en una fuente de verdad unica con checks de integridad
+- **Evaluerer stillinger** med strukturert A-F-scoring (10 vektede dimensjoner)
+- **Genererer skreddersydde PDF-er** — ATS-optimaliserte CV-er tilpasset hver stillingsannonse
+- **Skanner portaler** automatisk (Greenhouse, Ashby, Lever, Finn.no, Arbeidsplassen, bedriftssider)
+- **Prosesserer i batch** — evaluer 10+ stillinger parallelt med sub-agenter
+- **Sporer alt** i én sannhetskilde med integritetskontroller
 
-> **Importante: Esto NO es para spamear empresas.** Career-ops es un filtro -- te ayuda a encontrar las pocas ofertas que merecen tu tiempo entre cientos. El sistema recomienda encarecidamente no aplicar a nada por debajo de 4.0/5. Tu tiempo es valioso, y el del recruiter tambien. Siempre revisa antes de enviar.
+> **Viktig: Dette er IKKE et spray-and-pray-verktøy.** Career-ops er et filter — det hjelper deg finne de få stillingene som er verdt tiden din blant hundrevis. Systemet fraråder sterkt å søke på noe med score under 4.0/5. Tiden din er verdifull, og det er rekruttererens også. Gjennomgå alltid før du sender.
 
-> **Aviso: las primeras evaluaciones no seran buenas.** El sistema no te conoce todavia. Dale contexto -- tu CV, tu historia profesional, tus proof points, tus preferencias, en que eres bueno, que quieres evitar. Cuanto mas lo nutras, mejor filtra. Piensa en ello como hacer onboarding a un recruiter nuevo: la primera semana necesita conocerte, luego se vuelve invaluable.
+> **Obs: de første evalueringene blir ikke perfekte.** Systemet kjenner deg ikke ennå. Gi det kontekst — CV-en din, karrierehistorien din, bevisene dine, preferansene dine, hva du er god på, hva du vil unngå. Jo mer du gir, desto bedre filtrerer det. Tenk på det som onboarding av en ny rekrutterer: den første uken trenger de å lære om deg, deretter blir de uvurderlige.
 
-Construido por alguien que lo uso para evaluar 740+ ofertas, generar 100+ CVs personalizados, y conseguir un rol de Head of Applied AI. [Lee el case study completo](https://santifer.io/career-ops).
+Denne forken er oversatt til norsk bokmål med tilpasninger for det norske arbeidsmarkedet (Finn.no, NAV Arbeidsplassen, OTP, feriepenger, arbeidsmiljøloven, tariffavtaler). Original: [santifer/career-ops](https://github.com/santifer/career-ops). [Les hele case study-en](https://santifer.io/career-ops-system).
 
-## Inicio rapido
+## Hurtigstart
 
 ```bash
-# 1. Clonar
-git clone https://github.com/santifer/career-ops.git
-cd career-ops && npm install
+# 1. Klone og installer
+git clone https://github.com/crunkycrokeydrog9/career-ops-norsk.git
+cd career-ops-norsk && npm install
+npx playwright install chromium   # Påkrevd for PDF-generering
 
-# 2. Configurar
-cp config/profile.example.yml config/profile.yml  # Editar con tus datos
-cp templates/portals.example.yml portals.yml       # Personalizar empresas
+# 2. Konfigurer
+cp config/profile.example.yml config/profile.yml  # Fyll inn dine detaljer
+cp templates/portals.example.yml portals.yml       # Tilpass selskaper
 
-# 3. Añadir tu CV
-# Crear cv.md en la raiz del proyecto con tu CV en markdown
+# 3. Legg til CV-en din
+# Opprett cv.md i prosjektroten med CV-en din i markdown
 
-# 4. Personalizar con Claude
-claude   # Abrir Claude Code en este directorio
+# 4. Tilpass med Claude
+claude   # Åpne Claude Code i denne mappen
 
-# Pidele a Claude que adapte el sistema a ti:
-# "Cambia los arquetipos a roles de backend"
-# "Traduce los modes a ingles"
-# "Añade estas empresas a portals.yml"
-# "Actualiza mi perfil con este CV que te pego"
+# Be Claude tilpasse systemet til deg:
+# "Endre arketypene til backend-roller"
+# "Legg til disse selskapene i portals.yml"
+# "Oppdater profilen min med denne CV-en"
 
-# 5. Usar
-# Pega una URL de oferta o ejecuta /career-ops
+# 5. Begynn å bruke
+# Lim inn en stillings-URL eller kjør /career-ops
 ```
 
-> **El sistema esta diseñado para que Claude lo personalice.** Modes, arquetipos, scoring, scripts de negociacion -- solo pidelo. Claude lee los mismos archivos que usa, asi que sabe exactamente que editar.
+> **Systemet er designet for å tilpasses av Claude selv.** Moduser, arketyper, scoring-vekter, forhandlingsscript — bare spør. Claude leser de samme filene den bruker, så den vet nøyaktig hva den skal redigere.
 
-Guia completa en [docs/SETUP.md](docs/SETUP.md).
+Komplett guide i [docs/SETUP.md](docs/SETUP.md).
 
-## Portales incluidos
+## Inkluderte portaler
 
-El scanner viene con **45+ empresas** pre-configuradas y **19 queries** en los principales portales de empleo. Copia `templates/portals.example.yml` a `portals.yml` y añade las tuyas:
+Skanneren kommer med **45+ selskaper** forhåndskonfigurert og **19 søkespørringer** på tvers av store jobbportaler, pluss norske portaler. Kopier `templates/portals.example.yml` til `portals.yml` og legg til dine egne:
 
 **AI Labs:** Anthropic, OpenAI, Mistral, Cohere, LangChain, Pinecone
 **Voice AI:** ElevenLabs, PolyAI, Parloa, Hume AI, Deepgram, Vapi, Bland AI
-**Plataformas AI:** Retool, Airtable, Vercel, Temporal, Glean, Arize AI
+**AI-plattformer:** Retool, Airtable, Vercel, Temporal, Glean, Arize AI
 **Contact Center:** Ada, LivePerson, Sierra, Decagon, Talkdesk, Genesys
 **Enterprise:** Salesforce, Twilio, Gong, Dialpad
 **LLMOps:** Langfuse, Weights & Biases, Lindy, Cognigy, Speechmatics
-**Automatizacion:** n8n, Zapier, Make.com
+**Automatisering:** n8n, Zapier, Make.com
 **Europa:** Factorial, Attio, Tinybird, Clarity AI, Travelperk
+**Norge:** Finn.no, Arbeidsplassen (NAV), Kode24
 
-**Portales de empleo:** Ashby, Greenhouse, Lever, Wellfound, Workable, RemoteFront
+**Jobbportaler:** Ashby, Greenhouse, Lever, Wellfound, Workable, RemoteFront
 
-## Uso
+## Bruk
 
-Career-ops es un unico slash command con multiples modos:
+Career-ops er én slash-kommando med flere moduser:
 
 ```
-/career-ops                → Mostrar todos los comandos
-/career-ops {pega un JD}   → Pipeline completo (evaluar + PDF + tracker)
-/career-ops scan           → Escanear portales
-/career-ops pdf            → Generar CV ATS-optimizado
-/career-ops batch          → Evaluar ofertas en batch
-/career-ops tracker        → Ver estado de aplicaciones
-/career-ops apply          → Rellenar formularios con IA
-/career-ops pipeline       → Procesar URLs pendientes
-/career-ops contacto       → Mensaje LinkedIn outreach
-/career-ops deep           → Research profundo de empresa
+/career-ops                    → Vis alle tilgjengelige kommandoer
+/career-ops {lim inn en JD}    → Komplett auto-pipeline (evaluer + PDF + tracker)
+/career-ops skann              → Skann portaler etter nye stillinger
+/career-ops pdf                → Generer ATS-optimalisert CV
+/career-ops batch              → Masseevaluer flere stillinger
+/career-ops tracker            → Vis søknadsoversikt
+/career-ops soknad             → Fyll ut søknadsskjemaer med AI
+/career-ops pipeline           → Prosesser ventende URL-er
+/career-ops kontakt            → LinkedIn-oppsøkingsmelding
+/career-ops dybde              → Dybdeundersøkelse av selskap
+/career-ops opplaering         → Evaluer kurs/sertifisering
+/career-ops prosjekt           → Evaluer porteføljeprosjekt
 ```
 
-O simplemente pega una URL o descripcion de oferta -- career-ops la detecta y ejecuta el pipeline completo.
+Eller bare lim inn en stillings-URL eller -beskrivelse direkte — career-ops oppdager det automatisk og kjører hele pipelinen.
 
-## Tambien Open Source
+## Også open source
 
-- **[cv-santiago](https://github.com/santifer/cv-santiago)** -- El portfolio (santifer.io) con chatbot IA, dashboard LLMOps y case studies. Si necesitas un portfolio para acompañar tu busqueda de empleo, echale un vistazo.
+- **[cv-santiago](https://github.com/santifer/cv-santiago)** — Porteføljen (santifer.io) med AI-chatbot, LLMOps-dashboard og case-studier. Hvis du trenger en portefølje til jobbsøket ditt, fork den og gjør den til din.
 
-## Documentacion
+## Dokumentasjon
 
-- [SETUP.md](docs/SETUP.md) -- Guia de instalacion
-- [CUSTOMIZATION.md](docs/CUSTOMIZATION.md) -- Como personalizar
-- [ARCHITECTURE.md](docs/ARCHITECTURE.md) -- Como funciona el sistema
-
-## Let's Connect
-
-[![Website](https://img.shields.io/badge/santifer.io-000?style=for-the-badge&logo=safari&logoColor=white)](https://santifer.io)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/santifer)
-[![Email](https://img.shields.io/badge/Email-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:hola@santifer.io)
+- [SETUP.md](docs/SETUP.md) — Installasjonsguide
+- [CUSTOMIZATION.md](docs/CUSTOMIZATION.md) — Slik tilpasser du
+- [ARCHITECTURE.md](docs/ARCHITECTURE.md) — Slik fungerer systemet
